@@ -4,11 +4,11 @@
 #include <pthread.h>
 #include <time.h>
 
-#define SIZE 3
+#define SIZE 150
 
 
+int  result0[SIZE][SIZE],result1[SIZE][SIZE], matriz0[SIZE][SIZE], matriz1[SIZE][SIZE];
 
-int  result[SIZE][SIZE],  matriz0[SIZE][SIZE], matriz1[SIZE][SIZE];
 clock_t inicio_programa,fim_programa,inicio_mult,fim_mult;
 
 double tempo_programa, tempo_mult;
@@ -26,17 +26,16 @@ void imprime_matriz(int matriz[SIZE][SIZE]){
 }
 
 void gera_matriz(){
-    srand(time(NULL));
-    
+   
 
     for (int i = 0; i < SIZE; i++){
         
         for(int j = 0; j < SIZE; j++){
            
             
-            matriz0[i][j] = rand() % 10;
+            matriz0[i][j] = (i+j)*8;
             
-            matriz1[i][j] = rand() % 10;
+            matriz1[i][j] = (i+j)*5;
         
         }
 
@@ -52,7 +51,7 @@ void multiplica_matriz(){
 
         for(int j = 0; j < SIZE; j++){
            //pthread_mutex_lock(&er);
-            (result[i][j]) = matriz0[i][j] * matriz1[j][i];
+            (result0[i][j]) = matriz0[i][j] * matriz1[j][i];
             //pthread_mutex_unlock(&er);
         }
     }
@@ -66,7 +65,7 @@ void multiplica_matriz_pos(){
 
         for(int j = 0; j < SIZE; j++){
            // pthread_mutex_lock(&er);
-           (result[i][j]) = matriz0[i][j] * matriz1[i][j];
+           (result1[i][j]) = matriz0[i][j] * matriz1[i][j];
          //  pthread_mutex_unlock(&er);
         }
     }
@@ -76,20 +75,23 @@ void multiplica_matriz_pos(){
 int main(int argc, char ** argv){
 inicio_programa = clock();
     gera_matriz();
-    imprime_matriz(matriz0);
-    imprime_matriz(matriz1);
+    //imprime_matriz(matriz0);
+    //imprime_matriz(matriz1);
+   
+   // imprime_matriz(result);
 
     pthread_t t0,t1;
 
 inicio_mult = clock();
     pthread_create(&t0, NULL, (void *) multiplica_matriz, NULL);
-    pthread_join(t0, NULL);
-    imprime_matriz(result);
-    
     pthread_create(&t1, NULL, (void *) multiplica_matriz_pos, NULL);
+    pthread_join(t0, NULL);
     pthread_join(t1, NULL); 
-    imprime_matriz(result);
-fim_mult = clock();
+fim_mult = clock(); 
+
+
+//imprime_matriz(result0);
+//imprime_matriz(result1);
 
 fim_programa = clock();
 

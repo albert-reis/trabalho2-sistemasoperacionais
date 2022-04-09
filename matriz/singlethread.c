@@ -3,36 +3,37 @@
 #include <stdio.h>
 #include <time.h>
 
-#define SIZE 3
+#define SIZE 150
 
-int  result[SIZE][SIZE],  matriz0[SIZE][SIZE], matriz1[SIZE][SIZE],a;
+int  result0[SIZE][SIZE],result1[SIZE][SIZE], matriz0[SIZE][SIZE], matriz1[SIZE][SIZE],a;
 double tempo_programa, tempo_mult;
 
 clock_t inicio_programa,fim_programa,inicio_mult,fim_mult;
 
 void gera_matriz(){
-    srand(time(NULL));
-    
+   
 
     for (int i = 0; i < SIZE; i++){
         
         for(int j = 0; j < SIZE; j++){
            
-            matriz0[i][j] = rand() % 10;
             
-            matriz1[i][j] = rand() % 10;
-       
+            matriz0[i][j] = (i+j)*8;
+            
+            matriz1[i][j] = (i+j)*5;
+        
         }
 
     }
-
+    
+    
 }
 
 void multiplica_matriz(){
     for(int i = 0; i < SIZE; i++){
 
         for(int j = 0; j < SIZE; j++){
-            result[i][j] = matriz0[i][j] * matriz1[j][i];
+            result0[i][j] = matriz0[i][j] * matriz1[j][i];
         }
     
     }
@@ -44,7 +45,7 @@ void multiplica_matriz_pos(){
 
         for(int j = 0; j < SIZE; j++){
            // pthread_mutex_lock(&er);
-           (result[i][j]) = matriz0[i][j] * matriz1[i][j];
+           (result1[i][j]) = matriz0[i][j] * matriz1[i][j];
          //  pthread_mutex_unlock(&er);
         }
     }
@@ -67,24 +68,22 @@ int main(int argc, char ** argv){
    
    gera_matriz();
    
-   printf("Matriz A\n\n");
-   imprime_matriz(matriz0);
+   //printf("Matriz A\n\n");
+   //imprime_matriz(matriz0);
   
-   printf("Matriz B\n\n");
-   imprime_matriz(matriz1);
+   //printf("Matriz B\n\n");
+   //imprime_matriz(matriz1);
 
 inicio_mult = clock();
    multiplica_matriz();
-   
-   printf("Matriz C\n\n");
-   imprime_matriz(result);
-   
-   multiplica_matriz_pos();
-
+   multiplica_matriz_pos(); 
 fim_mult = clock();
 
-   printf("Matriz C\n\n");
-   imprime_matriz(result);
+   //printf("Matriz C\n\n");
+   //imprime_matriz(result0);
+   
+   //printf("Matriz C\n\n");
+   //imprime_matriz(result1);
 
    fim_programa = clock();
   
